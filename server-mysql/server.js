@@ -6,7 +6,6 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
-
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cors({
@@ -16,7 +15,7 @@ app.use(cors({
 
 
 const mysqlPool = require('./config/mysql');
-const { couch } = require('./config/couchdb');
+
 
 (async () => {
     try {
@@ -28,16 +27,6 @@ const { couch } = require('./config/couchdb');
     }
 })();
 
-
-// CouchDB Test
-(async () => {
-    try {
-      const dbList = await couch.db.list();
-      console.log('✅ CouchDB connected. Databases:', dbList);
-    } catch (err) {
-      console.error('❌ CouchDB connection error:', err.message);
-    }
-})();
 
 
 app.use((req, res, next) => {
@@ -57,6 +46,6 @@ app.get("/", (req,res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Express server is running on port ${PORT}`);
+    console.log(`Express-MySQL server is running on port ${PORT}`);
 });
 
