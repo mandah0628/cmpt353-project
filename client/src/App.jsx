@@ -1,9 +1,22 @@
+import { useLocation } from 'react-router-dom';
+import Router from './routes/routes';
+import Header from './components/Header';
+import CreateChannelModal from './components/CreateChannelModal'; 
+import { useState } from 'react';
+
 export default function App() {
-  return(
-    <div class="flex justify-center">
-      <div class="w-64 h-32 bg-blue-500">
-        I'm centered horizontally!
-      </div>
-    </div>
+  const location = useLocation();
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const hideHeader = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register';
+
+  return (
+    <>
+      {!hideHeader && <Header onCreateChannelClick={() => setShowCreateModal(true)} />}
+      <Router />
+      {showCreateModal && (
+        <CreateChannelModal onClose={() => setShowCreateModal(false)} />
+      )}
+    </>
   );
 }
