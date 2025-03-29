@@ -19,5 +19,4 @@ const { createReply } = require('../controller/replyController')
 router.post("/create-reply", authMiddleware, upload.single("image"), createReply);
 
 
-
 module.exports = router;
