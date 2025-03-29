@@ -3,6 +3,8 @@ const {
     getPostByIdDb, getAllPostsDb
 } = require('../data/postData')
 
+const { getAllPostRepliesDb } = require('../data/replyData')
+
 
 // creates a new post record in the posts table
 const createPost = async (req,res) => {
@@ -28,6 +30,7 @@ const createPost = async (req,res) => {
 
 
 // gets a post by its id from the posts table
+// and its replies
 const getPostById = async (req,res) => {
     try {
         // extract the post id from the dynamic route parameter
@@ -35,7 +38,9 @@ const getPostById = async (req,res) => {
 
         const post = await getPostByIdDb(postId);
 
-        res.status(200).json({post});
+        const replies = await getAllPostRepliesDb(postId);
+
+        res.status(200).json({post, replies});
         
     } catch (error) {
         console.error("Error fetching post from db", error.message);
