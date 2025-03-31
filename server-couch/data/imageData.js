@@ -1,1 +1,0 @@
-const couch = require('../config/couchdb')

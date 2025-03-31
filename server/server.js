@@ -31,7 +31,7 @@ app.use(cors({
 
 
 // mysql db connection
-const mysqlPool = require('./config/mysql');
+const mysqlPool = require('./config/mysql.js');
 (async () => {
     try {
       const connection = await mysqlPool.getConnection();

@@ -12,7 +12,7 @@ const createReply = async (req,res) => {
 
         // if there is an image file, upload to couchdb and get the id
         // if not, set it tonull
-        const imageId = image ? await uploadImage(image) : null;
+        const imageBuffer = image ? await uploadImage(image) : null;
 
         // prepare reply data
         const replyData = {...req.body , imageId, userId};
