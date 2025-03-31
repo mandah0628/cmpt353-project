@@ -39,11 +39,6 @@ app.use((err, req, res, next) => {
 });
   
 
-app.get("/", (req,res) => {
-    console.log("Hello puta");
-    res.json({message: "Hello puta"});
-});
-
 app.listen(PORT, () => {
     console.log(`Express-Couch server is running on port ${PORT}`);
 });
