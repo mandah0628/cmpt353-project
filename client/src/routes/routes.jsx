@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import HomePage from '../pages/HomePage';
 import ChannelListPage from '../pages/ChannelListPage';
 import ChannelPage from '../pages/ChannelPage';
@@ -8,8 +8,9 @@ import RegisterPage from '../pages/RegisterPage';
 import GuestRoute from './GuestRoute';
 
 export default function Router() {
+    const location = useLocation()
     return(
-        <Routes>
+        <Routes location={location} key={location.pathname}>
 
             {/* public routes, accessible by anyone */}
             <Route path='/' element={<HomePage />} />
