@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 export default function ChannelListPage() {
     const [channels, setChannels] = useState([]);
 
+
+    const API = import.meta.env.VITE_EXPRESS_BASE_URL;
+
     const fetchChannels = async () => {
         try {
-            const res = await axios.get(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`);
+            const res = await axios.get(`${API}/channel/get-channels`);
             setChannels(res.data.channels);
         } catch (error) {
             console.error("Error fetching channels:", error.response?.data?.message);
@@ -14,11 +17,9 @@ export default function ChannelListPage() {
         }
     }
 
-
     useEffect(() => {
        fetchChannels();
     }, [])
-
 
 
     return(
@@ -28,7 +29,9 @@ export default function ChannelListPage() {
                     className=''
                     key={index}
                 >
+                    {}
                 </div>
+                
             )}
         </div>
     );

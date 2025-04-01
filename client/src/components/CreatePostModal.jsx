@@ -1,10 +1,16 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useState, useEffect } from 'react';
 
 export default function CreatePostModal({ onClose }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+
+  const {authState, authLoading} = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +24,7 @@ export default function CreatePostModal({ onClose }) {
         description
       };
 
-      await axios.post(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`, data,
+      await axios.post(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}/post/create-post`, data,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -29,6 +35,15 @@ export default function CreatePostModal({ onClose }) {
       onClose();
     }
   };
+
+
+  useEffect(() => {
+    if (!authState && !authLoading) {
+      navigate("/login");
+    }
+  }, [authLoading,authState, navigate])
+  
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-out">

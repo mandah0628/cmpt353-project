@@ -1,26 +1,26 @@
-import axios from 'axios';
-import { useState } from 'react';
+import axiosInstance from '../utils/axios';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 export default function CreateChannelModal({ onClose }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const {authState, authLoading} = useAuth();
+  const navigate = useNavigate();
+
+ 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const token = localStorage.getItem("token");
+      const data = { title: name, description };
 
-      const data = {
-        title: name,
-        description
-      };
-
-      await axios.post(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`, data,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axiosInstance.post("/channel/create-channel", data,);
 
     } catch (error) {
       console.error("Error creating the channel:", error.response?.data?.message || error.message);
@@ -29,6 +29,12 @@ export default function CreateChannelModal({ onClose }) {
       onClose();
     }
   };
+
+  useEffect(() => {
+    if (!authState && !authLoading) {
+      navigate("/login");
+    }
+  }, [authLoading, authState, navigate]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-out">
