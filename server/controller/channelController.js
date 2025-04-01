@@ -24,7 +24,7 @@ const createChannel = async (req,res) => {
 
 
 // gets all channel records from the channels table
-const getAllChannels = async (params) => {
+const getAllChannels = async (req,res) => {
     try {
         const channels = await getAllChannelsDb();
         res.status(200).json({channels});
