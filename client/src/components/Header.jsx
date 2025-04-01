@@ -1,29 +1,57 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import CreateChannelModal from './CreateChannelModal';
+import CreatePostModal from './CreatePostModal';
 
-export default function Header({ onCreateChannelClick }) {
-    const location = useLocation();
-    const params = useParams();
+export default function Header({ onCreateChannelClick, onCreatePostclick }) {
+  const location = useLocation();
+  const navigate = useNavigate()
+
+  const {authState, logout} = useAuth();
+
+  const pathname = location.pathname;
+
+  const isAuthPage = pathname === "/login" || pathname === "/register";
+  const isChannelPage = /^\/channels(\/[^\/]+)?$/.test(pathname); 
+  const isPostPage = /^\/channels\/[^\/]+\/post\/[^\/]+$/.test(pathname);
+
+
   
-    const forChannelListPage = location.pathname.startsWith("/channels") && !params.channelName;
-    const forChannelPage = !!params.channelName && !params.postId;
-    const forPostPage = !!params.channelName && !!params.postId;
+  if (isAuthPage) {
+    return null;
+  }
   
-    return (
-      <header className="w-full flex justify-end items-center p-4 bg-gray-100 shadow">
-        {forChannelListPage && (
-          <button
-            onClick={onCreateChannelClick}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg mr-2"
-          >
+  return (
+    <header className="">
+
+      <h1 onClick={() => navigate("/")}>
+        Posting App
+      </h1>
+
+      {/* button containers */}
+      <div>
+
+        {/* Logout and login button */}
+        <button onClick={() => authState ? logout() : navigate("/login")}>
+          {authState ? "Logout" : "Log In"}
+        </button>
+
+        {/* Create channel modal button */}
+        {isChannelPage && (
+          <button onClick={onCreateChannelClick}>
             Create Channel
           </button>
         )}
-        {(forChannelPage || forPostPage) && (
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+
+        {/* Create post modal button */}
+        {isPostPage && (
+          <button onClick={on}>
             Create Post
           </button>
         )}
-      </header>
-    );
-  }
+            
+      </div>
+    </header>
+  );
+}
   
