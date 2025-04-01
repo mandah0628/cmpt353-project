@@ -4,7 +4,7 @@ const router = express.Router()
 
 // middleware imports
 const checkFields = require('../middleware/checkFields');
-const { createUser, loginUser } = require('../controller/userController');
+const { createUser, loginUser, logoutUser } = require('../controller/userController');
 
 
 //controller imports
@@ -16,5 +16,8 @@ router.post("/register", checkFields, createUser);
 
 // login route
 router.post("/login", checkFields, loginUser);
+
+//logout route
+router.post("/logout", logoutUser);
 
 module.exports = router;

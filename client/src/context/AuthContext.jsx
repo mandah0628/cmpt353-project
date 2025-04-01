@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axios';
 
 // Create context
 const AuthContext = createContext();
@@ -10,33 +10,23 @@ export default function AuthProvider ({ children }) {
   const [authState, setAuthState] = useState(false);
   const [authLoading, setLoading] = useState(true);
 
-  const API = import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL;
   
+
   // checks if user is logged in on initial load
   useEffect(() => {
     isTokenValid();
   }, []);
 
+
+
   // validates token authenticity on page load
   const isTokenValid = async () => {
     setLoading(true);
 
-    // gets token
-    const token = localStorage.getItem("token");
-
-    // if token already doesn't exist
-    if (!token) {
-      setAuthState(false);
-      setLoading(false);
-      return;
-    }
-
-    // if there is a token
+    
     try {
       // sends request to validate token
-      const response = await axios.get(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await axiosInstance.get("/auth/check-token");
 
       // if token is valid
       if (response.status === 200) {
@@ -53,26 +43,28 @@ export default function AuthProvider ({ children }) {
     }
   }
 
-  // Login function
+
+
+  /**
+   * Function to login a user with their email and password
+   * @param {string} email The user's email.
+   * @param {*} password The user's password
+   * @returns A promise that resolves when login is successful, or throws an error
+   */
   const login = async (email, password) => {
     try {
       // backend server expects an object
       const userDetails = {email, password};
       // sends request to validate credentials
-      const response = await axios.post(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`, userDetails);
+      const response = await axiosInstance.post("/user/login", userDetails);
 
       // if login is successful, the server sends a token
-      if(response.data.token) {
-        // stores token
-        localStorage.setItem("token", response.data.token);
-
+      if(response.status === 200) {
+       
         // sets global auth state to true
         setAuthState(true);
         return response.data.token;
       }
-
-      // somehow if token was not received
-      throw new Error("Unexpected response. No token received");
 
     // if server did not send a token
     } catch (error) {
@@ -81,30 +73,27 @@ export default function AuthProvider ({ children }) {
     }
   };
 
-  // Register function
+
+
+  /**
+   * Registers a new user and logs in the user.
+   * @param {Object} userDetails The form details from the register page.
+   */
   const register = async (userDetails) => {
     setLoading(true);
+
     try {
-      const response = await axios.post(`${import.meta.env.VITE_EXPRESS_MYSQL_BASE_URL}`, userDetails);
+      const response = await axiosInstance.post("/user/register", userDetails);
 
       // if user is created successfully
       if (response.status === 201) {
-        const token = response.data?.token;
-
-        if (token) {
-          localStorage.setItem("token", token)
-          setAuthState(true);
-          return token;
-        }
+        setAuthState(true);
       }
-  
+      
     } catch (error) {
       console.error('Registration error:', error);
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      } else {
-        throw new Error("Registration failed. Please check if the server is running.");
-      }
+      throw new Error(error.response?.data?.message);
+    
     } finally {
       setLoading(false);
     }

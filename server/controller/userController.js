@@ -17,7 +17,7 @@ const createUser = async (req, res) => {
         const { password } = req.body;
 
         // create a hashed password
-        const hashedPassword = hashPassword(password);
+        const hashedPassword = await hashPassword(password);
 
         // update the password to a hashed password
         const userData = {...req.body , password: hashedPassword};
@@ -31,14 +31,18 @@ const createUser = async (req, res) => {
         // 4)generate token
         const token = generateToken(userId);
 
-        // send token back to authenticat user right away
-        res.status(201).json({ 
-            message : "Account successfully created",
-            token
+        // send token back to authenticate user right away
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+            maxAge: 3600000
         });
 
+        res.status(201).send("ok"); 
+
     } catch (error) {
-        console.error("Error regstering:", error);
+        console.error("Error registering:", error);
         res.status(500).json({ error : "Server side error"});
     }
 };
@@ -50,29 +54,48 @@ const loginUser = async (req,res) => {
         // extract data
         const { email, password } = req.body;
         
-        // fetch the user from the db
+        // 1) check if user exists by email
         const user = await getUser(email);
 
+        // no user found
         if(!user) {
             return res.status(404).json({message:"Invalid email or password"});
         }
 
-        // checks if password is correct
-        const passwordIsValid = validatePassword(password, user.password);
+        // 2) check if password is correct
+        const passwordIsValid = await validatePassword(password, user.password);
 
-        // if password is correct
-        if(passwordIsValid) {
-            const token = generateToken(user.id);
-            return res.status(200).json({token});
+        // incorrect password
+        if(!passwordIsValid) {
+            return res.status(401).json({ message:"Invalid email or password"});
         }
 
+        // 3) if all is good
+        const token = generateToken(user.id);
+            
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+            maxAge: 3600000
+        });
+
+        res.status(200).send("ok");  
+
     } catch (error) {
-        console.error("Error loggin in user:", error.message);
+        console.error("Error logging in user:", error.message);
         res.status(500).json({messaege : "Server error"});
     }
 }
 
 
+// logs user out
+const logoutUser = async (req,res) => {
+    res.clearCookie("token");
+    res.status(200).json({ message: "Logged out successfully" });
+}
+
+
 module.exports = {
-    createUser, loginUser
+    createUser, loginUser, logoutUser
 }
