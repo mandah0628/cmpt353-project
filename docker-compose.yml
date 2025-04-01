@@ -20,63 +20,24 @@ services:
       retries: 3
       start_period: 30s
 
-  couchdb:
-    image: couchdb:latest
-    container_name: couch-container
-    environment:
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: password
-    ports:
-      - "5984:5984"
-    volumes:
-      - couchdb-data:/opt/couchdb/data
-    networks:
-      - app_network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5984/_up"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    command: ["couchdb", "-c", "log.level=info"]
-
-  express-mysql:
-    build: ./server-mysql
-    image: express-mysql-image
-    container_name: express-mysql-container
+  express:
+    build: ./server
+    image: express-image
+    container_name: express-container
     ports:
       - "8080:8080"
     command: npm run dev
     env_file:
-      - ./server-mysql/.env
+      - ./server/.env
     depends_on:
       mysql:
         condition: service_healthy
     volumes:
-      - ./server-mysql:/app
+      - ./server:/app
       - /app/node_modules
     networks:
       - app_network
-
-
-  express-couch:
-    build: ./server-couch
-    image: express-couch-image
-    container_name: express-couch-container
-    ports:
-      - "9090:9090"
-    command: npm run dev
-    env_file:
-      - ./server-couch/.env
-    depends_on:
-      couchdb:
-        condition: service_healthy
-    volumes:
-      - ./server-couch:/app
-      - /app/node_modules
-    networks:
-      - app_network
-    
+ 
 
   react:
     build: ./client
@@ -88,8 +49,7 @@ services:
     env_file:
       - ./client/.env
     depends_on:
-      - express-couch
-      - express-mysql
+      - express
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -98,7 +58,6 @@ services:
 
 volumes:
   mysql-data:
-  couchdb-data:
 
 networks:
   app_network:
