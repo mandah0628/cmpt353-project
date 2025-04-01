@@ -12,11 +12,14 @@ const upload = multer({storage})
 
 
 // controller imports
-const { createReply } = require('../controller/replyController')
+const { createReply, getAllReplies } = require('../controller/replyController')
 
 
-// create reply route
-router.post("/create-reply", authMiddleware, upload.single("image"), createReply);
+// route to create a reply 
+router.post("/create-reply", authMiddleware, upload.single("image"), checkFields, createReply);
+
+// route to get all replies for a post by the post id
+router.get("/get-replies/:postId", getAllReplies);
 
 
 module.exports = router;
