@@ -6,6 +6,25 @@ const cookieParser = require('cookie-parser');
 // create express instance
 const app = express();
 
+
+// allows requests from the frontend with cookies
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        credentials: true
+    }
+));
+// allows server to parses cookies
+app.use(cookieParser());
+
+// allows server to parse json request bodies
+app.use(express.json(
+    {
+        limit: "5mb",
+        type:"application/json"
+    }
+));
+
 // define port
 const PORT = process.env.PORT || 8080;
 
@@ -22,25 +41,6 @@ app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/post", postRoute);
 
-
-// allows server to parses cookies
-app.use(cookieParser());
-
-// allows server to parse json request bodies
-app.use(express.json(
-    {
-        limit: "5mb",
-        type:"application/json"
-    }
-));
-
-// allows requests from the frontend with cookies
-app.use(cors(
-    {
-        origin: "http://react:5173",
-        credentials: true
-    }
-));
 
 
 // mysql db connection
@@ -71,6 +71,6 @@ app.use((err, req, res, next) => {
 
 // expose server
 app.listen(PORT, () => {
-    console.log(`Express-MySQL server is running on port ${PORT}`);
+    console.log(`Express server is running on port ${PORT}`);
 });
 
