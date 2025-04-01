@@ -1,21 +1,27 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import Router from './routes/routes';
 import Header from './components/Header';
-import CreateChannelModal from './components/CreateChannelModal'; 
-import { useState } from 'react';
+import CreateChannelModal from './components/CreateChannelModal';
+import CreatePostModal from './components/CreatePostModal';
 
 export default function App() {
-  const location = useLocation();
-  const [showCreateModal, setShowCreateModal] = useState(false);
-
-  const hideHeader = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register';
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showCreatePostModal, setShowCreatePostModal] = useState(false);
 
   return (
     <>
-      {!hideHeader && <Header onCreateChannelClick={() => setShowCreateModal(true)} />}
+      <Header 
+        onCreateChannelClick={() => setShowCreateChannelModal(true)} 
+        onCreatePostClick={() => setShowCreatePostModal(true)} 
+      />
       <Router />
-      {showCreateModal && (
-        <CreateChannelModal onClose={() => setShowCreateModal(false)} />
+
+      {showCreateChannelModal && (
+        <CreateChannelModal onClose={() => setShowCreateChannelModal(false)} />
+      )}
+
+      {showCreatePostModal && (
+        <CreatePostModal onClose={() => setShowCreatePostModal(false)} />
       )}
     </>
   );
