@@ -1,21 +1,18 @@
 const fs = require('fs');
-const mysqlPool = require('../config/mysql') 
+const path = require('path');
+const mysqlPool = require('../config/mysql');
 
 const initDb = async () => {
-  try {
-    const files = [
-      'createUsers.sql',
-      'createChannels.sql',
-      'createPost.sql',
-      'createReplies.sql',
-    ];
+  const files = ['createUsers.sql', 'createChannels.sql', 'createPost.sql', 'createReplies.sql'];
 
+  try {
     for (const file of files) {
-      const sql = fs.readFileSync(`./${file}`, 'utf8');
+      
+      const sqlPath = path.join(__dirname, file);
+      const sql = fs.readFileSync(sqlPath, 'utf8');
       await mysqlPool.query(sql);
       console.log(`✅ Executed ${file}`);
     }
-
     console.log('✅ All tables created!');
     process.exit(0);
   } catch (err) {
