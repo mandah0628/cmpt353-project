@@ -26,7 +26,6 @@ services:
     container_name: express-container
     ports:
       - "8080:8080"
-    command: npm run dev
     env_file:
       - ./server/.env
     depends_on:
