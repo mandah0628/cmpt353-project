@@ -4,11 +4,10 @@ const router = express.Router()
 
 // middleware imports
 const checkFields = require('../middleware/checkFields');
-const { createUser, loginUser, logoutUser } = require('../controller/userController');
 
 
 //controller imports
-
+const { createUser, loginUser, logoutUser } = require('../controller/userController');
 
 
 // register route

@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 
 // create express instance
 const app = express();
-
+  
 
 // allows requests from the frontend with cookies
 app.use(cors(
@@ -14,6 +14,9 @@ app.use(cors(
         credentials: true
     }
 ));
+
+
+
 // allows server to parses cookies
 app.use(cookieParser());
 
@@ -29,17 +32,18 @@ app.use(express.json(
 const PORT = process.env.PORT || 8080;
 
 // route imports
-const channelRoute = require('./routes/channelRoute.js')
-const userRoute = require('./routes/userRoute.js')
-const authRoute = require('./routes/authRoute.js')
-const postRoute = require('./routes/postRoute.js')
-
+const channelRoute = require('./routes/channelRoute.js');
+const userRoute = require('./routes/userRoute.js');
+const authRoute = require('./routes/authRoute.js');
+const postRoute = require('./routes/postRoute.js');
+const replyRoute = require('./routes/replyRoute.js');
 
 // define main routes
 app.use("/channel", channelRoute);
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/post", postRoute);
+app.use("/reply", replyRoute);
 
 
 

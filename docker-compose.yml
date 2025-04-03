@@ -20,23 +20,6 @@ services:
       retries: 3
       start_period: 30s
 
-  express:
-    build: ./server
-    image: express-image
-    container_name: express-container
-    ports:
-      - "8080:8080"
-    env_file:
-      - ./server/.env
-    depends_on:
-      mysql:
-        condition: service_healthy
-    volumes:
-      - ./server:/app
-      - /app/node_modules
-    networks:
-      - app_network
- 
 
   react:
     build: ./client
@@ -47,8 +30,6 @@ services:
     command: npm run dev
     env_file:
       - ./client/.env
-    depends_on:
-      - express
     volumes:
       - ./client:/app
       - /app/node_modules

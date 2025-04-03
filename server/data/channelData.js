@@ -15,6 +15,22 @@ const createChannelDb = async (channelData) => {
     return result;
 }
 
+
+/**
+ * Get a single channel record from the channels table.
+ * @param {number} channelId The channel id.
+ * @returns A promise that resolves into a channel object. null otherwise.
+ */
+const getChannelByIdDb = async (channelId) => {
+    const query = `SELECT * FROM channels WHERE id = ?`;
+
+    const [channel] = await mysqlPool.execute(query, [channelId]);
+
+    return channel.length > 0 ? channel[0] : null ;
+}
+
+
+
 /**
  * 
  * @returns A promise that resolves into an array of all the channel records
@@ -23,10 +39,11 @@ const getAllChannelsDb = async () => {
     const query = `SELECT * FROM channels ORDER BY createdAt DESC`;
 
     const [channels] = await mysqlPool.execute(query);
+    
     return channels;
 }
 
 
 module.exports = {
-    createChannelDb, getAllChannelsDb
+    createChannelDb, getAllChannelsDb, getChannelByIdDb
 }

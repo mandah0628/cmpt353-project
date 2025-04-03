@@ -1,7 +1,9 @@
 const {
     createReplyDb,
     getAllPostRepliesDb
-} = require('../data/replyData')
+} = require('../data/replyData');
+
+const { getUserByIdDb } = require('../data/userData');
 
 
 // creates a reply record in the 'replies' table
@@ -11,11 +13,13 @@ const createReply = async (req,res) => {
         const userId = req.user.id;
         const image = req.file;
 
-        // if there is an image file, get the binary data
+        // if there is an image file, get the binary data and mimetype
         const imageBuffer = image ? image.buffer : null;
-
+        const imageMimeType = image ? image.mimetype : null;
+        const parentReplyId = req.body.parentReplyId ? req.body.parentReplyId : null;
         // prepare reply data
-        const replyData = {...req.body , image : imageBuffer, userId};
+        const replyData = {...req.body , image : imageBuffer, userId, imageMimeType, parentReplyId};
+        console.log(replyData);
 
         // create reply record in the replies table
         await createReplyDb(replyData);
@@ -48,7 +52,13 @@ const getAllReplies = async (req,res) => {
             }
         }));
 
-        res.status(200).json({formattedReplies});
+        const repliesWithUsername = await Promise.all(
+                formattedReplies.map(async (reply) => {
+                    const userName = await getUserByIdDb(reply.userId);
+                    return {...reply, userName};
+        }));
+
+        res.status(200).json({repliesWithUsername});
 
     } catch (error) {
         console.error("Error fetching replies:", error);

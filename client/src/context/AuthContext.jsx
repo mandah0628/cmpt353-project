@@ -26,7 +26,7 @@ export default function AuthProvider ({ children }) {
     
     try {
       // sends request to validate token
-      const response = await axiosInstance.get("/auth/check-token");
+      const response = await axiosInstance.post("/auth/check-token");
 
       // if token is valid
       if (response.status === 200) {
@@ -55,15 +55,16 @@ export default function AuthProvider ({ children }) {
     try {
       // backend server expects an object
       const userDetails = {email, password};
+      
+      console.log("Submitting to:", import.meta.env.VITE_EXPRESS_BASE_URL);
       // sends request to validate credentials
       const response = await axiosInstance.post("/user/login", userDetails);
+      console.log("Login response:", response);
 
       // if login is successful, the server sends a token
       if(response.status === 200) {
-       
         // sets global auth state to true
         setAuthState(true);
-        return response.data.token;
       }
 
     // if server did not send a token
@@ -111,7 +112,6 @@ export default function AuthProvider ({ children }) {
     <AuthContext.Provider value={{
       authState,
       authLoading,
-      API,
       isTokenValid,
       login,
       register,

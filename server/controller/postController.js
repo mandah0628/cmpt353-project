@@ -1,9 +1,11 @@
 const { 
     createPostDb, 
     getPostByIdDb, getAllPostsDb
-} = require('../data/postData')
+} = require('../data/postData');
 
-const { getAllPostRepliesDb } = require('../data/replyData')
+const { getAllPostRepliesDb } = require('../data/replyData');
+
+const { getUserByIdDb } = require('../data/userData')
 
 
 // creates a new post record in the posts table
@@ -38,7 +40,15 @@ const getPostById = async (req,res) => {
 
         const post = await getPostByIdDb(postId);
 
-        const replies = await getAllPostRepliesDb(postId);
+        const repliesWithoutUsername = await getAllPostRepliesDb(postId);
+
+        const replies = await Promise.all(
+            repliesWithoutUsername.map(async (reply) => {
+                const user = await getUserByIdDb(reply.userId);
+                const userName = user.name;
+                const userImage = user.image;
+                return {...reply, userName, userImage};
+            }));
 
         res.status(200).json({post, replies});
         

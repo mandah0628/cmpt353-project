@@ -33,4 +33,18 @@ const getUser = async (email) => {
 
 
 
-module.exports = { createUserDb, getUser };
+/**
+ * Finds the name of the user by the user's id.
+ * @param {number} userId 
+ * @returns A promise that resolves into the user's name. null if no record is found.
+ */
+const getUserByIdDb = async (userId) => {
+    const query = `SELECT * FROM users WHERE id= ? LIMIT 1`
+    const [users] = await mysqlPool.execute(query, [userId])
+
+    return users.length > 0 ? users[0]: null;
+}
+
+
+
+module.exports = { createUserDb, getUser, getUserByIdDb };

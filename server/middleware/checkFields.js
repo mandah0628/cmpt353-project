@@ -5,6 +5,7 @@ function checkFields(req, res, next) {
   
     // get all the values of the fields and store it in an array
     const fieldValues = Object.values(fields);
+    
     // loops through each value
     // returns true if all fields are valid
     const hasEmptyField = fieldValues.some( (value) =>
