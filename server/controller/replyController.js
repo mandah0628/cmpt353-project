@@ -17,8 +17,14 @@ const createReply = async (req,res) => {
         const imageBuffer = image ? image.buffer : null;
         const imageMimeType = image ? image.mimetype : null;
         const parentReplyId = req.body.parentReplyId ? req.body.parentReplyId : null;
+
+        //createdAt
+        const createdAt = new Date().toISOString();
+
         // prepare reply data
-        const replyData = {...req.body , image : imageBuffer, userId, imageMimeType, parentReplyId};
+        const replyData = {...req.body , image : imageBuffer, userId, imageMimeType, parentReplyId, createdAt};
+
+
         console.log(replyData);
 
         // create reply record in the replies table
