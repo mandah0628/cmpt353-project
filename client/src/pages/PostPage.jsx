@@ -63,14 +63,14 @@ export default function PostPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center pt-40 bg-gray-50 px-4">
+        <div className="min-h-screen flex flex-col items-center pt-40 px-4">
           
           <div className="w-full max-w-2xl"> 
             
             {/* Post */}
-            <div className="bg-white p-5 rounded shadow mb-6">
-              <h1 className="text-2xl font-semibold mb-2">{post.title}</h1>
-              <p className="text-gray-700 whitespace-pre-wrap">{post.description}</p>
+            <div className="p-5 rounded shadow mb-6">
+              <h1 className="text-2xl font-semibold mb-2 text-center">{post.title}</h1>
+              <p className="whitespace-pre-wrap text-center">{post.description}</p>
             </div>
       
             {/* Add Reply */}
@@ -78,7 +78,7 @@ export default function PostPage() {
       
             {/* Replies */}
             <div className="bg-white flex flex-col p-5 gap-5 rounded-xl shadow">
-              <h2 className="text-xl font-semibold mb-3">Replies</h2>
+              <h2 className="text-xl font-semibold mb-3 text-center">Replies</h2>
               {replies.map(reply => (
                 <Reply key={reply.id} reply={reply} />
               ))}

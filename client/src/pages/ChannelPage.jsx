@@ -49,51 +49,40 @@ export default function ChannelPage() {
     }
 
 
-    return(
+    return (
         <>
-            <Header
-                onCreatePostClick={() => setShowPostModal(true)}
-            />
-
-            {showPostModal && (
-                <CreatePostModal 
-                    onClose={() => setShowPostModal(false)} 
-                />
-            )}
-
-
-            <div className='min-h-screen flex items-center justify-center flex-col gap-5 bg-fuchsia-300 mx-50'>
-                
-                {/* channel info container */}
-                <div>
-
-                </div>
-
-                {/* posts container */}
-                <div>
-                    {posts.map((post, index) => (
-                        <div
-                            className='flex bg-amber-200 flex-col gap-4 m-5'
-                            onClick={() => navigate(`/channels/${channelId}/post/${post.id}`)}
-                        >
-                                <h1 
-                                    key={index} 
-                                    className='p-5 font-bold w-full text-center'
-                                >
-                                    {post.title}
-                                </h1>
-
-                                <p 
-                                    key={index}
-                                    className='p-5 text-center'
-                                >
-                                    {post.description}
-                                </p>
-                        
-                        </div>
-                    ))}
-                </div>
+          <Header onCreatePostClick={() => setShowPostModal(true)} />
+      
+          {showPostModal && (
+            <CreatePostModal onClose={() => setShowPostModal(false)} />
+          )}
+      
+          <div className="min-h-screen flex flex-col items-center pt-30 px-4 mx-50">
+            <div className="w-full max-w-2xl">
+      
+              {/* Channel info */}
+              <div className="p-5 rounded-xl shadow mb-15 border border-blue-400 ">
+                <h1 className="text-2xl font-bold mb-2 text-center">{channel.title}</h1>
+                <p className="text-gray-700 whitespace-pre-wrap text-center">{channel.description}</p>
+              </div>
+      
+              {/* Posts */}
+              <div className="flex flex-col gap-5 mt-5 ">
+                {posts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="rounded-xl border border-transparent hover:border-blue-400 shadow transition-colors duration-200 bg-white cursor-pointer my-3"
+                    onClick={() => navigate(`/channels/${channelId}/post/${post.id}`)}
+                  >
+                    <h1 className="p-5 font-bold text-lg">{post.title}</h1>
+                    <p className="px-5 pb-5 text-gray-700">{post.description}</p>
+                  </div>
+                ))}
+              </div>
+              
             </div>
+          </div>
         </>
-    )
+      );
+      
 }

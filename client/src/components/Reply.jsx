@@ -43,24 +43,27 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
     <div className={`ml-${depth * 4} border-l-2 border-gray-300 pl-4`}>
         
         {/* reply data */}
-        <div className="bg-white p-3 rounded shadow">
-
+        <div className="p-3 rounded shadow border border-transparent hover:border-blue-400 transition-colors duration-200">
 
             {/* profile photo, name and date */}
-            <div className='flex gap-5 bg-amber-200'>
+            <div className='flex items-center'>
                 <img
                     src={userImgSrc}
-                    className='w-10 h-10'
+                    className='w-10 h-10 mr-2'
                 />
-                <h2>{reply.userName}</h2>
-                <p>
-                    {value}{time}
-                </p>
+                <div className="flex gap-5">
+                    <h2>{reply.userName}</h2>
+                    <p> Posted: {value}{time}
+                    </p>
+                </div>
+                
             </div>
+                
+           
 
 
             {/* reply comment and image */}
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 pt-5">
                 {imageSrc && (
                     <img
                         src={imageSrc}
@@ -77,7 +80,7 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
             {/* button to open the reply form */}
             <button
                 onClick={() => setShowReplyForm(!showReplyForm)}
-                className="text-blue-600 hover:underline mt-2 font-semibold"
+                className="text-blue-600 hover:underline mt-2 cursor-pointer font-semibold"
             >
                 {showReplyForm ? 'Cancel' : 'Add Reply'}
             </button>

@@ -39,10 +39,10 @@ export default function ChannelListPage() {
 
 
     return(
-        <div className='min-h-screen flex items-center justify-center flex-col gap-5'>
+        <div className='min-h-screen  flex flex-col items-center pt-30 mx-50'>
             {channels.map((channel, index) => (
                 <div
-                    className='flex bg-amber-200 flex-col'
+                    className='flex flex-col my-5 w-full rounded-xl border border-transparent hover:border-blue-400 shadow transition-colors duration-200 cursor-pointer'
                     onClick={() => navigate(`/channels/${channel.id}`)}
                 >
                         <h1 

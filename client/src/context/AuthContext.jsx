@@ -55,11 +55,9 @@ export default function AuthProvider ({ children }) {
     try {
       // backend server expects an object
       const userDetails = {email, password};
-      
-      console.log("Submitting to:", import.meta.env.VITE_EXPRESS_BASE_URL);
+      console.log(userDetails);
       // sends request to validate credentials
       const response = await axiosInstance.post("/user/login", userDetails);
-      console.log("Login response:", response);
 
       // if login is successful, the server sends a token
       if(response.status === 200) {
@@ -101,10 +99,13 @@ export default function AuthProvider ({ children }) {
   };
 
   // logout function
-  const logout = () => {
-    // Remove token from localStorage
-    localStorage.removeItem('token');
-    setAuthState(false);
+  const logout = async () => {
+    try {
+      await axiosInstance.post("/user/logout");
+      setAuthState(false);
+    } catch (error) {
+      console.error(error.response?.data?.message)
+    }
   };
 
   // values and functions that are accessible globally

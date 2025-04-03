@@ -53,10 +53,11 @@ const loginUser = async (req,res) => {
     try {
         // extract data
         const { email, password } = req.body;
+    
         
         // 1) check if user exists by email
         const user = await getUser(email);
-
+        
         // no user found
         if(!user) {
             return res.status(404).json({message:"Invalid email or password"});
@@ -71,7 +72,9 @@ const loginUser = async (req,res) => {
         }
 
         // 3) if all is good
+
         const token = generateToken(user.id);
+        
             
         res.cookie("token", token, {
             httpOnly: true,

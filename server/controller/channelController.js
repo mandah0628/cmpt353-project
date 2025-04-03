@@ -11,6 +11,7 @@ const { getAllPostsDb } = require('../data/postData');
 const createChannel = async (req,res) => {
     try {
         const userId = req.user.id;
+        console.log(userId)
         const channelData = {...req.body, userId};
 
         console.log(channelData);
@@ -21,7 +22,7 @@ const createChannel = async (req,res) => {
         })
 
     } catch (error) {
-        console.error("Error creating channel:", error);
+        console.error(error);
         res.status(500).json({message: "Server error"});
     }
 }

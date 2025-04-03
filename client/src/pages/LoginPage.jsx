@@ -50,7 +50,6 @@ export default function LoginPage() {
         }
 
         try {
-            console.log("PEsda llr n");
             await login(form.email, form.password);
             navigate("/");
         } catch (error) {
