@@ -55,7 +55,7 @@ const updateUserDb = async (userId, userData) => {
 
     const query = `UPDATE users SET ${setClause} WHERE id = ?`;
 
-    mysqlPool.execute(query, [...values, userId]);
+    await mysqlPool.execute(query, [...values, userId]);
 }
 
 
