@@ -79,8 +79,8 @@ export default function LoginPage() {
     }
 
     return (
-        <div className='min-h-screen flex flex-col items-center justify-center bg-green-50'>
-            <div className='rounded-2xl shadow-lg p-10 w-100 border-2 border-orange-300'>
+        <div className='min-h-screen flex flex-col items-center justify-center '>
+            <div className='rounded-2xl shadow-lg p-10 w-100 border-2'>
                 <h2 className='p-5 text-center font-bold text-2xl'>Sign In</h2>
 
                 {/* form container */}

@@ -5,7 +5,8 @@ const validatePassword = require('../utils/validatePassword');
 const { 
     // add db operations
     createUserDb,
-    getUser,
+    getUserByEmail,
+    getUserByIdDb
   
 } = require('../data/userData');
 
@@ -56,7 +57,7 @@ const loginUser = async (req,res) => {
     
         
         // 1) check if user exists by email
-        const user = await getUser(email);
+        const user = await getUserByEmail(email);
         
         // no user found
         if(!user) {
@@ -92,6 +93,7 @@ const loginUser = async (req,res) => {
 }
 
 
+
 // logs user out
 const logoutUser = async (req,res) => {
     res.clearCookie("token");
@@ -99,6 +101,61 @@ const logoutUser = async (req,res) => {
 }
 
 
+
+// get user data by the user's id
+const getUserById = async (req,res) => {
+    try {
+        const userId = req.user.id;
+
+        const user = await getUserByIdDb(userId);
+
+        const {password,createdAt, ...userData} = user;
+
+        // encode image so its ready to be displayed right away on the client
+        if(userData.image) {
+            const base64Image = Buffer.from(user.image).toString("base64");
+            userData.image = `data:${user.imageMimeType};base64,${base64Image}`;
+        } else {
+            userData.image = null;
+        }
+
+        res.status(200).json({userData});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: "Error fetching user data"});
+    }
+}
+
+
+
+// update user info
+const updateUser = async (req,res) => {
+    try {
+        // extract new image file
+        const newImage = req.file;
+        const
+
+        let imageBuffer, imageMimeType;
+        // if there is a new image file
+        if (newImage) {
+            imageBuffer = newImage.buffer;
+            imageMimeType = newImage.mimetype;
+            userData = {...req.body, image : imageBuffer, imageMimeType}
+        }
+
+        await updateUse
+
+        res.status(200).send
+
+
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({});
+    }
+}
+
+
 module.exports = {
-    createUser, loginUser, logoutUser
+    createUser, loginUser, logoutUser, getUserById
 }

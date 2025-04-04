@@ -24,7 +24,7 @@ const createUserDb = async (userData) => {
  * @param {String} email The user's email.
  * @returns A promise that resolves into a user object, null if record is not found.
  */
-const getUser = async (email) => {
+const getUserByEmail = async (email) => {
     const query  = `SELECT * FROM users WHERE email = ? LIMIT 1`;
     const [rows] = await mysqlPool.execute(query,[email]);
     
@@ -34,9 +34,9 @@ const getUser = async (email) => {
 
 
 /**
- * Finds the name of the user by the user's id.
- * @param {number} userId 
- * @returns A promise that resolves into the user's name. null if no record is found.
+ * Finds the user by the user's id.
+ * @param {number} userId The user id.
+ * @returns A promise that resolves into the user object. null if no record is found.
  */
 const getUserByIdDb = async (userId) => {
     const query = `SELECT * FROM users WHERE id= ? LIMIT 1`
@@ -47,4 +47,17 @@ const getUserByIdDb = async (userId) => {
 
 
 
-module.exports = { createUserDb, getUser, getUserByIdDb };
+const updateUserDb = async (userId, userData) => {
+    const fields = Object.keys(userData);
+    const values = Object.values(userData);
+
+    const setClause = fields.map(field => `${field} = ?`).join(', ');
+
+    const query = `UPDATE users SET ${setClause} WHERE id = ?`;
+
+    mysqlPool.execute(query, [...values, userId]);
+}
+
+
+
+module.exports = { createUserDb, getUserByEmail, getUserByIdDb };

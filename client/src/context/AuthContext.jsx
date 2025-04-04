@@ -55,7 +55,7 @@ export default function AuthProvider ({ children }) {
     try {
       // backend server expects an object
       const userDetails = {email, password};
-      console.log(userDetails);
+    
       // sends request to validate credentials
       const response = await axiosInstance.post("/user/login", userDetails);
 
