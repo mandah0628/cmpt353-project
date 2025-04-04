@@ -133,14 +133,18 @@ export default function PostPage() {
                 </div>
             </div>
       
-            {/* Add Reply */}
-            <ReplyForm postId={postId} onReplyPosted={fetchPostData} />
+            {/* add reply form */}
+            <ReplyForm 
+                postId={postId} onReplyPosted={fetchPostData} 
+            />
       
-            {/* Replies */}
+            {/* post replies */}
             <div className="bg-white flex flex-col p-5 gap-5 rounded-xl shadow">
               <h2 className="text-xl font-bold mb-3 text-center">Replies</h2>
               {replies.map(reply => (
-                <Reply key={reply.id} reply={reply} />
+                <Reply 
+                    key={reply.id} reply={reply} 
+                />
               ))}
             </div>
       

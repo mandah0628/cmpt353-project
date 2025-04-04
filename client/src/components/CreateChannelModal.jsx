@@ -39,9 +39,14 @@ export default function CreateChannelModal({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-out">
       <div className="bg-white p-6 rounded-xl w-[400px] shadow-xl transform transition-all duration-300 scale-100 opacity-100">
+
+        {/* heading */}
         <h2 className="text-xl font-bold mb-4 text-gray-800">Create a New Channel</h2>
 
+        {/* form */}
         <form onSubmit={handleSubmit}>
+
+          {/* channel name */}
           <input
             type="text"
             placeholder="Channel name"
@@ -50,6 +55,8 @@ export default function CreateChannelModal({ onClose }) {
             className="w-full border px-3 py-2 rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
             required
           />
+
+          {/* channel description */}
           <textarea
             placeholder="Channel description"
             value={description}
@@ -57,7 +64,9 @@ export default function CreateChannelModal({ onClose }) {
             className="w-full border px-3 py-2 rounded mb-4 h-24 resize-none focus:outline-none focus:ring focus:ring-blue-300"
           ></textarea>
 
+          {/* buttons */}
           <div className="flex justify-end gap-2">
+            {/* cancel button */}
             <button
               type="button"
               onClick={onClose}
@@ -67,6 +76,7 @@ export default function CreateChannelModal({ onClose }) {
               Cancel
             </button>
 
+            {/* submit button */}
             <button
               type="submit"
               disabled={submitting}

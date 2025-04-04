@@ -81,10 +81,14 @@ export default function LoginPage() {
     return (
         <div className='min-h-screen flex flex-col items-center justify-center '>
             <div className='rounded-2xl shadow-lg p-10 w-100 border-2'>
+
+                {/* header */}
                 <h2 className='p-5 text-center font-bold text-2xl'>Sign In</h2>
 
                 {/* form container */}
                 <form onSubmit={handleSubmit} className='space-y-4'>
+
+                    {/* email */}
                     <input
                         type="email"
                         name='email'
@@ -97,6 +101,7 @@ export default function LoginPage() {
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.email}</p>
                     )}
 
+                    {/* password */}
                     <input
                         type="password"
                         name='password'
@@ -109,6 +114,7 @@ export default function LoginPage() {
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.password}</p>
                     )}
 
+                    /{/* login button */}
                     <button
                         type='submit'
                         className='mx-auto block p-2 font-bold border-2 rounded-md hover:bg-blue-300 transition-colors duration-200'
@@ -116,6 +122,7 @@ export default function LoginPage() {
                     >
                         {submitting ? "Loading..." : "Sign In"}
                     </button>
+
 
                     <p className='text-center'>
                         Don't have an account yet? 

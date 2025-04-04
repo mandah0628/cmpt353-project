@@ -11,9 +11,10 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
 
 
   /**
-   * Convers ISO 
+   * Calculaten how long ago the resource was created.
    * @param {string} createdAt ISO 8601 time string.
-   * @returns 
+   * @returns The floor value in hours if resource has been created more than an hour ago.
+   * The floor value in himues otherwise.
    */
   const calculateTime = (createdAt) => {
 
@@ -21,11 +22,7 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
     const timestamp = new Date(createdAt).getTime();
     const difference = now - timestamp;
 
-    const hours = Math.floor(difference / 3600000);
-    console.log(now)
-    console.log(timestamp)
-    console.log(difference)
-    
+    const hours = Math.floor(difference / 3600000);    
 
     if (hours >= 1) {
         return {time: "h", value: hours};
@@ -56,7 +53,6 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
                     <p> Posted: {value}{time} ago
                     </p>
                 </div>
-                
             </div>
                 
            

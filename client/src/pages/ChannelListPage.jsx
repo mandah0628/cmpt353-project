@@ -45,20 +45,13 @@ export default function ChannelListPage() {
                     className='flex flex-col mb-5 w-full rounded-xl border border-transparent hover:border-blue-400 shadow transition-colors duration-200 cursor-pointer'
                     onClick={() => navigate(`/channels/${channel.id}`)}
                 >
-                        <h1 
-                            key={index} 
-                            className='p-5 font-bold w-full text-center text-2xl'
-                        >
-                            {channel.title}
-                        </h1>
+                    <h1 key={index} className='p-5 font-bold w-full text-center text-2xl'>
+                        {channel.title}
+                     </h1>
 
-                        <p 
-                            key={index}
-                            className='p-5 text-center'
-                        >
-                            {channel.description}
-                        </p>
-                
+                    <p key={index} className='p-5 text-center'>
+                        {channel.description}
+                    </p>
                 </div>
             ))}
         </div>

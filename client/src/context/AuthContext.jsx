@@ -1,16 +1,14 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import axiosInstance from '../utils/axios';
 
-// Create context
+// create context
 const AuthContext = createContext();
 
-
-// Provider component
+// provider component
 export default function AuthProvider ({ children }) {
   const [authState, setAuthState] = useState(false);
   const [authLoading, setLoading] = useState(true);
 
-  
 
   // checks if user is logged in on initial load
   useEffect(() => {
@@ -18,12 +16,10 @@ export default function AuthProvider ({ children }) {
   }, []);
 
 
-
-  // validates token authenticity on page load
+  // validates token authenticity on application mount
   const isTokenValid = async () => {
     setLoading(true);
 
-    
     try {
       // sends request to validate token
       const response = await axiosInstance.post("/auth/check-token");
@@ -98,7 +94,8 @@ export default function AuthProvider ({ children }) {
     }
   };
 
-  // logout function
+
+  // Logs user our
   const logout = async () => {
     try {
       await axiosInstance.post("/user/logout");
@@ -107,6 +104,7 @@ export default function AuthProvider ({ children }) {
       console.error(error.response?.data?.message)
     }
   };
+
 
   // values and functions that are accessible globally
   return (
@@ -123,12 +121,9 @@ export default function AuthProvider ({ children }) {
   );
 };
 
+
 // creates hook to use the global functions and values
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  // preventing to use the context outside of its scope
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
   return context;
 };

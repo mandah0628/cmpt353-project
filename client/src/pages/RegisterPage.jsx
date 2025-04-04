@@ -100,6 +100,8 @@ export default function RegisterPage() {
     return (
         <div className='min-h-screen flex flex-col items-center justify-center'>
             <div className='rounded-2xl shadow-lg p-10 w-100 border-2 '>
+
+                {/* header */}
                 <div className='pb-5'>
                     <h2 className='px-5 text-center font-bold text-2xl'>Register</h2>
                     <p className='text-center'>Please enter your details</p>
@@ -122,6 +124,7 @@ export default function RegisterPage() {
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.name}</p>
                     )}
                     
+
                     {/* email */}
                     <input
                         type="email"
@@ -135,6 +138,7 @@ export default function RegisterPage() {
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.email}</p>
                     )}
 
+
                     {/* password */}
                     <input
                         type="password"
@@ -147,6 +151,7 @@ export default function RegisterPage() {
                     {clientErrors.password && (
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.password}</p>
                     )}
+
 
                     {/* confirm password */}
                     <input
@@ -162,6 +167,8 @@ export default function RegisterPage() {
                         <p className='text-red-500 font-bold text-sm'>{clientErrors.confirmPassword}</p>
                     )}
 
+
+                    {/* register button */}
                     <button
                         type='submit'
                         className='mx-auto block p-2 font-bold border-2 rounded-md hover:bg-blue-300 transition-colors duration-200'
@@ -170,6 +177,8 @@ export default function RegisterPage() {
                         {submitting ? "Loading..." : "Register"}
                     </button>
 
+
+                    {/* sign in */}
                     <p className='text-center'>
                         Already have an account? 
                         <Link to="/login" className='font-bold hover:text-blue-500 transition-colors duration-300'> Sign In</Link>
@@ -179,6 +188,7 @@ export default function RegisterPage() {
                     )}
 
                 </form>
+                
             </div>
         </div>
     );

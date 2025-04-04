@@ -22,7 +22,9 @@ export default function CreatePostModal({ onClose }) {
 
     try {
       validateForm();
+
       const formData = new FormData();
+
       formData.append("title", name.trim());
       formData.append("description", description.trim());
       formData.append("channelId", channelId);
@@ -68,9 +70,14 @@ export default function CreatePostModal({ onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm transition-opacity duration-300 ease-out">
       <div className="bg-white p-6 rounded-xl w-[400px] shadow-xl transform transition-all duration-300 scale-100 opacity-100">
+
+        {/* header */}
         <h2 className="text-xl font-bold mb-4 text-gray-800">Create a Post</h2>
 
+        {/* form */}
         <form onSubmit={handleSubmit}>
+
+          {/* post title */}
           <input
             type="text"
             placeholder="Post title"
@@ -79,6 +86,8 @@ export default function CreatePostModal({ onClose }) {
             className="w-full border px-3 py-2 rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
             required
           />
+
+          {/* post description */}
           <textarea
             placeholder="Post description"
             value={description}
@@ -87,6 +96,7 @@ export default function CreatePostModal({ onClose }) {
           >
           </textarea>
 
+          {/* image preview */}
           {image && (
              <img 
               className='w-30 h-30 mb-2' 
@@ -127,7 +137,7 @@ export default function CreatePostModal({ onClose }) {
                 Cancel
               </button>
 
-              {/* create button */}
+              {/* create post button */}
               <button
                 type="submit"
                 disabled={submitting}

@@ -51,8 +51,11 @@ export default function ChannelPage() {
 
     return (
         <>
-          <Header onCreatePostClick={() => setShowPostModal(true)} />
+          <Header 
+            onCreatePostClick={() => setShowPostModal(true)} 
+          />
       
+          {/* create post pop-up */}
           {showPostModal && (
             <CreatePostModal onClose={() => setShowPostModal(false)} />
           )}
@@ -60,13 +63,13 @@ export default function ChannelPage() {
           <div className="min-h-screen flex flex-col items-center pt-30 px-4 mx-50">
             <div className="w-full max-w-2xl">
       
-              {/* Channel info */}
+              {/* channel info */}
               <div className="p-5 rounded-xl shadow mb-15 border border-blue-400 ">
                 <h1 className="text-2xl font-bold mb-2 text-center">{channel.title}</h1>
                 <p className="text-gray-700 whitespace-pre-wrap text-center">{channel.description}</p>
               </div>
       
-              {/* Posts */}
+              {/* posts */}
               <div className="flex flex-col gap-5 mt-5 ">
                 {posts.map((post) => (
                   <div
