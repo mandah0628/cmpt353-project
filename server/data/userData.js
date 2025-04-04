@@ -46,7 +46,11 @@ const getUserByIdDb = async (userId) => {
 }
 
 
-
+/**
+ * Updates the user info.
+ * @param {number} userId The user id.
+ * @param {Object} userData An object containing the new info with matching key names
+ */
 const updateUserDb = async (userId, userData) => {
     const fields = Object.keys(userData);
     const values = Object.values(userData);
@@ -60,4 +64,4 @@ const updateUserDb = async (userId, userData) => {
 
 
 
-module.exports = { createUserDb, getUserByEmail, getUserByIdDb };
+module.exports = { createUserDb, getUserByEmail, getUserByIdDb, updateUserDb};

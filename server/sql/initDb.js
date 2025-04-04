@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mysqlPool = require('../config/mysql');
 
+// creates the tables in the db
 const initDb = async () => {
   const files = ['createUsers.sql', 'createChannels.sql', 'createPost.sql', 'createReplies.sql'];
 
@@ -11,12 +12,12 @@ const initDb = async () => {
       const sqlPath = path.join(__dirname, file);
       const sql = fs.readFileSync(sqlPath, 'utf8');
       await mysqlPool.query(sql);
-      console.log(`✅ Executed ${file}`);
+      
     }
-    console.log('✅ All tables created!');
+    console.log('All tables have been created in db');
     process.exit(0);
   } catch (err) {
-    console.error('❌ Error creating tables:', err);
+    console.error('ERROR creating tables:', err);
     process.exit(1);
   }
 };

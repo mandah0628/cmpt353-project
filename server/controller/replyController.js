@@ -6,28 +6,26 @@ const {
 const { getUserByIdDb } = require('../data/userData');
 
 
+
 // creates a reply record in the 'replies' table
 const createReply = async (req,res) => {
     try {
-        // extract data
+        // 1) extract data
         const userId = req.user.id;
         const image = req.file;
 
-        // if there is an image file, get the binary data and mimetype
+        // 3) if there is an image file, get the binary data and mimetype
         const imageBuffer = image ? image.buffer : null;
         const imageMimeType = image ? image.mimetype : null;
         const parentReplyId = req.body.parentReplyId ? req.body.parentReplyId : null;
 
-        //createdAt
+        // 4) createdAt
         const createdAt = new Date().toISOString();
 
-        // prepare reply data
+        // 5) prepare reply data
         const replyData = {...req.body , image : imageBuffer, userId, imageMimeType, parentReplyId, createdAt};
 
-
-        console.log(replyData);
-
-        // create reply record in the replies table
+        // 6) create reply record in the replies table
         await createReplyDb(replyData);
     
         res.status(200).send("OK");
@@ -39,15 +37,17 @@ const createReply = async (req,res) => {
 }
 
 
+
 // gets all reply records from the 'replies' table associated with the post
 const getAllReplies = async (req,res) => {
     try {
-        // extract data
+        // 1) extract data
         const {postId} = req.params;
 
-        // fetch replies
+        // 2) fetch replies
         const replies = await getAllPostRepliesDb(postId);
 
+        // 3) converts the binary image data to base64 urls
         const formattedReplies = replies.map((reply => {
             if(reply.image) {
                 const base64Image = Buffer.from(reply.image).toString("base64");
@@ -58,6 +58,7 @@ const getAllReplies = async (req,res) => {
             }
         }));
 
+        // 4) add the user name to each reply
         const repliesWithUsername = await Promise.all(
                 formattedReplies.map(async (reply) => {
                     const userName = await getUserByIdDb(reply.userId);

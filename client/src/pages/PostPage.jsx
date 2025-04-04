@@ -8,6 +8,8 @@ export default function PostPage() {
     const [post, setPost] = useState({});
     const [replies, setReplies] = useState([]);
     const [fetching, setFetching] = useState(true);
+    const [postUser, setPostUser] = useState({});
+    const [postImage, setPostImage] = useState(null);
 
     const { postId } = useParams();
 
@@ -17,10 +19,13 @@ export default function PostPage() {
             setFetching(true);
 
             const res = await axiosInstance.get(`/post/get-post/${postId}`);
-            
+    
             setPost(res.data.post);
             setReplies(buildReplyTree(res.data.replies));
-
+            setPostImage(res.data.post.image);
+            setPostUser(res.data.user);
+            
+            console.log(res.data.user)
         } catch (error) {
             console.error("Error fetching post:", error.response?.data?.message);
         } finally {
@@ -28,6 +33,25 @@ export default function PostPage() {
         }
     };
 
+
+    const calculateTime = (createdAt) => {
+
+        const now = Date.now();
+        const timestamp = new Date(createdAt).getTime();
+        const difference = now - timestamp;
+    
+        const hours = Math.floor(difference / 3600000);
+        console.log(now)
+        console.log(timestamp)
+        console.log(difference)
+        
+    
+        if (hours >= 1) {
+            return {time: "h", value: hours};
+        } else if (hours < 1) {
+            return {time:"m", value: Math.floor(difference/60000)}
+        }
+      }
 
 
     useEffect(() => {
@@ -56,11 +80,13 @@ export default function PostPage() {
 
     if (fetching) {
         return (
-            <div className='min-h-screen flex items-center justify-center bg-green-50'>
+            <div className='min-h-screen flex items-center justify-center'>
                 <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
+
+    const { value, time } = calculateTime(post.createdAt);
 
     return (
         <div className="min-h-screen flex flex-col items-center pt-40 px-4">
@@ -68,9 +94,43 @@ export default function PostPage() {
           <div className="w-full max-w-2xl"> 
             
             {/* Post */}
-            <div className="p-5 rounded shadow mb-6">
-              <h1 className="text-2xl font-semibold mb-2 text-center">{post.title}</h1>
-              <p className="whitespace-pre-wrap text-center">{post.description}</p>
+            <div className="flex p-5 rounded shadow mb-6 gap-5">
+
+                {/* post image */}
+                {postImage && (
+                    <img
+                        src={postImage}
+                        className='w-65 h-65'
+                    />
+                )}
+                
+                {/* post */}
+                <div className='flex flex-col'>
+
+                    {/* post info */}
+                    <div className='flex items-center'>
+                        {/* user profile photo and name */}
+                        <div className='flex items-center'>
+                            <img
+                                src={postUser.image ?? "/default.jpg"}
+                                alt="User"
+                                className="w-16 h-16"
+                            />
+                            <p>{postUser.name}</p>
+                        </div>
+                       
+                        <p className='ml-5'>Posted: {value}{time} ago</p>
+                        
+                        
+                    </div>
+
+                    {/* post title and description */}
+                    <div>
+                        <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
+                        <p>{post.description}</p>
+                    </div>
+
+                </div>
             </div>
       
             {/* Add Reply */}
@@ -78,7 +138,7 @@ export default function PostPage() {
       
             {/* Replies */}
             <div className="bg-white flex flex-col p-5 gap-5 rounded-xl shadow">
-              <h2 className="text-xl font-semibold mb-3 text-center">Replies</h2>
+              <h2 className="text-xl font-bold mb-3 text-center">Replies</h2>
               {replies.map(reply => (
                 <Reply key={reply.id} reply={reply} />
               ))}

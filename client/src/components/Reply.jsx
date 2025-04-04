@@ -53,7 +53,7 @@ export default function Reply({ reply, depth = 0, onReplyPosted }) {
                 />
                 <div className="flex gap-5">
                     <h2>{reply.userName}</h2>
-                    <p> Posted: {value}{time}
+                    <p> Posted: {value}{time} ago
                     </p>
                 </div>
                 

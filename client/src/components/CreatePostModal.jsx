@@ -1,7 +1,7 @@
 import axiosInstance from '../utils/axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function CreatePostModal({ onClose }) {
   const [name, setName] = useState('');
@@ -13,14 +13,22 @@ export default function CreatePostModal({ onClose }) {
   const {authState, authLoading} = useAuth();
   const navigate = useNavigate();
 
+  const addImageRef = useRef();
+  const [image, setImage] = useState(null)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      const postData = { title: name, description, channelId };
+      validateForm();
+      const formData = new FormData();
+      formData.append("title", name.trim());
+      formData.append("description", description.trim());
+      formData.append("channelId", channelId);
+      formData.append("image", image);
 
-      const res = await axiosInstance.post("/post/create-post", postData);
+      const res = await axiosInstance.post("/post/create-post", formData);
 
       const postId = res.data.postId;
 
@@ -34,6 +42,20 @@ export default function CreatePostModal({ onClose }) {
     }
   };
 
+  const validateForm = () => {
+    if (!name || !description) {
+      return;
+    }
+  }
+
+  const handleImageUpload = (e) =>{
+    const image = e.target.files[0];
+    setImage(image);
+  }
+
+  const addImageClick = () => {
+    addImageRef.current.click();
+  }
 
   useEffect(() => {
     if (!authState && !authLoading) {
@@ -51,7 +73,7 @@ export default function CreatePostModal({ onClose }) {
         <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Post name"
+            placeholder="Post title"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4 focus:outline-none focus:ring focus:ring-blue-300"
@@ -62,33 +84,66 @@ export default function CreatePostModal({ onClose }) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full border px-3 py-2 rounded mb-4 h-24 resize-none focus:outline-none focus:ring focus:ring-blue-300"
-          ></textarea>
+          >
+          </textarea>
 
-          <div className="flex justify-end gap-2">
+          {image && (
+             <img 
+              className='w-30 h-30 mb-2' 
+              src={image ? URL.createObjectURL(image) : null}>
+            </img>
+          )}
+
+
+          {/* buttons */}
+          <div
+            className='flex justify-between'
+          >
+            {/* add image button */}
+            <input
+              type='file'
+              className='hidden'
+              ref={addImageRef}
+              onChange={handleImageUpload}
+            />
+
             <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition"
-              disabled={submitting}
+              type='button'
+              className='bg-blue-400 p-4 rounded cursor-pointer'
+              onClick={addImageClick}
             >
-              Cancel
+              Add Image
             </button>
 
-            <button
-              type="submit"
-              disabled={submitting}
-              className={`px-4 py-2 text-white rounded transition flex items-center justify-center ${
-                submitting
-                  ? 'bg-green-500 cursor-not-allowed'
-                  : 'bg-green-600 hover:bg-green-700'
-              }`}
-            >
-              {submitting ? (
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : (
-                'Create'
-              )}
-            </button>
+            {/* cancel and create buttons */}
+            <div className='flex gap-2'>
+              {/* cancel button */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="cursor-pointer px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition"
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+
+              {/* create button */}
+              <button
+                type="submit"
+                disabled={submitting}
+                className={`cursor-pointer px-4 py-2 text-white rounded transition flex items-center justify-center ${
+                  submitting
+                    ? 'bg-green-500 cursor-not-allowed'
+                    : 'bg-green-600 hover:bg-green-700'
+                }`}
+              >
+                {submitting ? (
+                  <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  'Create'
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </div>

@@ -10,7 +10,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage})
 
 //controller imports
-const { createUser, loginUser, logoutUser, getUserById } = require('../controller/userController');
+const { createUser, loginUser, logoutUser, getUserById, updateUser } = require('../controller/userController');
 
 
 // register route
@@ -26,6 +26,6 @@ router.post("/logout", logoutUser);
 router.get("/get-user", authMiddleware, getUserById)
 
 // update user route
-router.purge("/update-user", authMiddleware, upload.single("image"), checkFields, update)
+router.put("/update-user", authMiddleware, upload.single("newImage"), checkFields, updateUser)
 
 module.exports = router;

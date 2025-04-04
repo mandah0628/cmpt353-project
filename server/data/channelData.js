@@ -32,7 +32,7 @@ const getChannelByIdDb = async (channelId) => {
 
 
 /**
- * 
+ * Retrieves all channels from the channels table.
  * @returns A promise that resolves into an array of all the channel records
  */
 const getAllChannelsDb = async () => {

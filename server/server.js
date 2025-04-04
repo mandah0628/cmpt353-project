@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 // create express instance
 const app = express();
   
-
 // allows requests from the frontend with cookies
 app.use(cors(
     {
@@ -14,7 +13,6 @@ app.use(cors(
         credentials: true
     }
 ));
-
 
 
 // allows server to parses cookies
@@ -52,10 +50,10 @@ const mysqlPool = require('./config/mysql.js');
 (async () => {
     try {
       const connection = await mysqlPool.getConnection();
-      console.log('✅ MySQL connected');
+      console.log('Db connection established');
       connection.release();
     } catch (err) {
-      console.error('❌ MySQL connection error:', err.message);
+      console.error('Db connection ERROR', err.message);
     }
 })();
 
@@ -66,7 +64,7 @@ app.use((req, res, next) => {
 });
   
 
-//
+// unhandled error handler
 app.use((err, req, res, next) => {
     console.error("Unhandled error:", err);
     res.status(500).json({ message: "Something went wrong", error: err.message });

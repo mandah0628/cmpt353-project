@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import axiosInstance from '../utils/axios';
+import {useAuth} from '../context/AuthContext'
+import {useNavigate} from 'react-router-dom'
 
 export default function ProfileSettingsPage() {
     const[form, setForm] = useState({
@@ -13,6 +15,9 @@ export default function ProfileSettingsPage() {
 
     const[fetching, setFetching] = useState(true);
     const[submitting, setSubmitting] = useState(false);
+
+    const {authState, authLoading} = useAuth();
+    const navigate = useNavigate();
 
     const fileInputRef = useRef();
 
@@ -30,7 +35,6 @@ export default function ProfileSettingsPage() {
 
             setUserImage(res.data.userData.image);
 
-            console.log(res.data)
         } catch (error) {
             console.error("Error fetching user data")
         } finally {
@@ -85,8 +89,14 @@ export default function ProfileSettingsPage() {
         fetchUserData();
     },[]);
 
+    
+    useEffect(() => {
+        if(!authState && !authLoading) {
+            navigate("/login");
+        }
+    },[authLoading, authState, navigate]);
 
-    console.log(form);
+
     
     return(
         <div className="pt-20 min-h-screen flex items-center justify-center mx-50">

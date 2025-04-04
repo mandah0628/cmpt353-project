@@ -91,15 +91,15 @@ export default function RegisterPage() {
 
     if (authLoading) {
         return(
-            <div className='min-h-screen flex items-center justify-center bg-green-50'>
+            <div className='min-h-screen flex items-center justify-center'>
                 <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             </div>
         );
     }
 
     return (
-        <div className='min-h-screen flex flex-col items-center justify-center bg-green-50'>
-            <div className='rounded-2xl shadow-lg p-10 w-100 border-2 border-orange-300'>
+        <div className='min-h-screen flex flex-col items-center justify-center'>
+            <div className='rounded-2xl shadow-lg p-10 w-100 border-2 '>
                 <div className='pb-5'>
                     <h2 className='px-5 text-center font-bold text-2xl'>Register</h2>
                     <p className='text-center'>Please enter your details</p>

@@ -7,11 +7,11 @@ const mysqlPool = require('../config/mysql');
  * @returns The operation metadata object from a promise that reolves into an an array.
  */
 const createPostDb = async (postData) => {
-    const { title, description, userId, channelId } = postData;
+    const { title, description, userId, channelId, image, imageMimeType, createdAt } = postData;
 
-    const query = `INSERT INTO posts (title, description, userId, channelId) VALUES(?,?,?,?)`;
+    const query = `INSERT INTO posts (title, description, userId, channelId, image, imageMimeType, createdAt) VALUES(?,?,?,?,?,?,?)`;
 
-    const [result] = await mysqlPool.execute(query, [title, description, userId, channelId]);
+    const [result] = await mysqlPool.execute(query, [title, description, userId, channelId, image, imageMimeType, createdAt]);
     
     return result;
 }

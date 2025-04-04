@@ -34,6 +34,8 @@ export default function ReplyForm({ postId, onReplyPosted, parentReplyId=null}) 
             setComment('');
             setImage(null);
             onReplyPosted(); 
+
+
         } catch (error) {
             console.error('Error posting reply:', error.response?.data?.message);
             if (error.response?.status === 401) {
@@ -49,7 +51,11 @@ export default function ReplyForm({ postId, onReplyPosted, parentReplyId=null}) 
 
             {/*comment and image preview*/}
             <div
-                className='flex flex-col w-full p-2 border rounded mb-2'
+                className="flex flex-col w-full p-2 border border-gray-300 rounded mb-2 
+                focus-within:border-blue-400 
+                focus-within:ring-1 
+                focus-within:ring-blue-400 
+                transition-colors duration-200"
             >
                 {/* image preview */}
                 {image && (

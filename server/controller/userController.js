@@ -6,8 +6,8 @@ const {
     // add db operations
     createUserDb,
     getUserByEmail,
-    getUserByIdDb
-  
+    getUserByIdDb,
+    updateUserDb
 } = require('../data/userData');
 
 
@@ -105,13 +105,15 @@ const logoutUser = async (req,res) => {
 // get user data by the user's id
 const getUserById = async (req,res) => {
     try {
+        // 1) extract the user is
         const userId = req.user.id;
-
+        // 2) get the user
         const user = await getUserByIdDb(userId);
 
+        // 3) remove extra info
         const {password,createdAt, ...userData} = user;
 
-        // encode image so its ready to be displayed right away on the client
+        // 4) encode image so its ready to be displayed right away on the client
         if(userData.image) {
             const base64Image = Buffer.from(user.image).toString("base64");
             userData.image = `data:${user.imageMimeType};base64,${base64Image}`;
@@ -131,23 +133,24 @@ const getUserById = async (req,res) => {
 // update user info
 const updateUser = async (req,res) => {
     try {
-        // extract new image file
+        // 1) extract user id
+        const userId = req.user.id;
+
+        // 2) extract new image file
         const newImage = req.file;
-        const
 
         let imageBuffer, imageMimeType;
-        // if there is a new image file
+        // 3) if there is a new image file, get the buffer and mimetype
         if (newImage) {
             imageBuffer = newImage.buffer;
             imageMimeType = newImage.mimetype;
             userData = {...req.body, image : imageBuffer, imageMimeType}
         }
 
-        await updateUse
+        // 4) update record in db
+        await updateUserDb(userId, userData);
 
-        res.status(200).send
-
-
+        res.status(200).send("ok");
 
     } catch (error) {
         console.error(error);
@@ -157,5 +160,5 @@ const updateUser = async (req,res) => {
 
 
 module.exports = {
-    createUser, loginUser, logoutUser, getUserById
+    createUser, loginUser, logoutUser, getUserById, updateUser
 }

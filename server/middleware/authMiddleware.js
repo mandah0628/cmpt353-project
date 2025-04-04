@@ -3,7 +3,7 @@ const verifyToken = require('../utils/verifyToken')
 const authMiddleware = (req,res,next) => {
   // extract token
   const token = req.cookies.token;
-  console.log(token);
+  
   // if there is no token
   if (!token) {
     return res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -11,8 +11,8 @@ const authMiddleware = (req,res,next) => {
 
   // decoded jwt
   const decoded = verifyToken(token);
-  console.log(decoded);
   
+  // attach the decoded user info in the request
   req.user = decoded;
 
   // if token is expired
