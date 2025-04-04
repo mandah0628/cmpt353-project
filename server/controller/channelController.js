@@ -10,12 +10,14 @@ const { getAllPostsDb } = require('../data/postData');
 // creates a new channel record in the channels table
 const createChannel = async (req,res) => {
     try {
+        // 1) extract user id
         const userId = req.user.id;
-        console.log(userId)
+        // 2) prepare channel data
         const channelData = {...req.body, userId};
 
-        console.log(channelData);
+        // 3) create channel record in the channels table
         const result = await createChannelDb(channelData);
+
         res.status(201).json({
             message:"Channel created", 
             channelId: result.insertId
@@ -33,14 +35,13 @@ const createChannel = async (req,res) => {
 // get a single channel record from the channels table, along with all its posts
 const getChannelById = async (req,res) => {
     try {
+        // 1) extract channel id
         const { channelId } = req.params;
 
+        // 2) get the channel 
         const channel = await getChannelByIdDb(channelId);
 
-        if (!channel) {
-            return res.status(500).json({message: "Error fetching channel info"});
-        }
-
+        // 3) get all posts
         const posts = await getAllPostsDb(channelId);
 
         res.status(200).json({channel, posts});
@@ -56,6 +57,7 @@ const getChannelById = async (req,res) => {
 // gets all channel records from the channels table
 const getAllChannels = async (req,res) => {
     try {
+        // 1) get all channels
         const channels = await getAllChannelsDb();
        
         res.status(200).json({channels});

@@ -11,9 +11,12 @@ const { getUserByIdDb } = require('../data/userData')
 // creates a new post record in the posts table
 const createPost = async (req,res) => {
     try {
-        // extract file
+        // 1) extract file
         const image = req.file;
+
         let imageBuffer, imageMimeType;
+        // 2) if there is an image file, get the buffer and mimetype
+        // set to null otherwise
         if (image) {
             imageBuffer = image.buffer;
             imageMimeType = image.mimetype;
@@ -23,17 +26,17 @@ const createPost = async (req,res) => {
         }
 
 
-        // extract user id
+        // 3) extract user id
         const userId = req.user.id;
-        //createdAt
+        //4) createdAt
         const createdAt = new Date().toISOString();
-        // prepare the post data
+        // 5) prepare the post data
         const postData = {...req.body, userId, image : imageBuffer, imageMimeType, createdAt};
 
-        // INSERT 
+        // create the record in the posts table
         const result = await createPostDb(postData);
 
-        // get the post id from the INSERT metadata
+        // 6) get the post id from the INSERT metadata
         const postId = result.insertId;
 
         res.status(200).json({postId});
@@ -49,16 +52,17 @@ const createPost = async (req,res) => {
 // and its replies
 const getPostById = async (req,res) => {
     try {
-        // extract the post id from the dynamic route parameter
+        // 1) extract the post id from the dynamic route parameter
         const { postId } = req.params;
 
-        // get post from db
+        // 2) get post from db
         const post = await getPostByIdDb(postId);
 
-        // get replies without username and user's profile photo
+        // 3) get replies without username and user's profile photo
         const repliesWithoutUsername = await getAllPostRepliesDb(postId);
 
-        // adding a user name and user image keys
+        // 4) fetch the user info for each reply and 
+        // add to each reply object
         const replies = await Promise.all(
             repliesWithoutUsername.map(async (reply) => {
                 const user = await getUserByIdDb(reply.userId);
@@ -68,15 +72,17 @@ const getPostById = async (req,res) => {
             })
         );
 
-        // post image 
+        // 6) extract post image 
         const postImage = post.image;
+        // 7) if there is an image buffer, convert to base64 url string
         if (postImage) {
             const base64Image = Buffer.from(post.image).toString("base64");
             post.image = `data:${post.imageMimeType};base64,${base64Image}`;
         }
 
-        // get post user
+        // 8) get post user
         const user = await getUserByIdDb(post.userId);
+        // 9) if there is an image buffer, convert to base64 url string
         if(user.image) {
             const base64Image = Buffer.from(user.image).toString("base64");
             user.image = `data:${user.imageMimeType};base64,${base64Image}`;
@@ -91,11 +97,12 @@ const getPostById = async (req,res) => {
 }
 
 
-// gets all post for the channel by the channel id
+// gets all posts for the channel by the channel id
 const getAllPosts = async (req,res) => {
     try {
+        // 1) extract channelId
         const { channelId } = req.params;
-
+        // 2) fetch all posts for the channel from the posts table
         const posts = await getAllPostsDb(channelId);
 
         res.status(200).json({posts});
